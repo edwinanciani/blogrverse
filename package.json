@@ -1,0 +1,41 @@
+{
+  "name": "edwinanciani.github.io",
+  "version": "1.0.0",
+  "description": "Edwin's Website",
+  "scripts": {
+    "dev": "next dev -H 0.0.0.0",
+    "build": "next build",
+    "prettier": "prettier -write .",
+    "lint": "next lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edwinanciani/edwinanciani.github.io.git"
+  },
+  "keywords": [],
+  "author": "Edwin Anciani<edwinanciani@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/edwinanciani/edwinanciani.github.io/issues"
+  },
+  "homepage": "https://github.com/edwinanciani/edwinanciani.github.io#readme",
+  "dependencies": {
+    "@chakra-ui/icons": "^1.0.16",
+    "@chakra-ui/react": "^1.6.10",
+    "@emotion/react": "^11.5.0",
+    "@emotion/styled": "^11.3.0",
+    "formiojs": "^4.13.8",
+    "framer-motion": "^5.0.0",
+    "next": "^12.0.1",
+    "next-auth": "^3.29.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-icons": "^4.3.1",
+    "swr": "^1.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.1.0",
+    "eslint-config-next": "^12.0.1",
+    "prettier": "^2.4.1"
+  }
+}

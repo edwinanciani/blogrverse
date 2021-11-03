@@ -1,0 +1,7 @@
+html, body, #__next, main {
+  margin: 0;
+  height: 100vh;
+}
+.primary-text {
+  color: #C3376A;
+}
