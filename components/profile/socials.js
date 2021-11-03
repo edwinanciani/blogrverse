@@ -1,6 +1,6 @@
 import {Box, VStack, Button, Link} from '@chakra-ui/react'
 import {FiTwitter, FiInstagram, FiYoutube, FiFlag, FiMapPin} from 'react-icons/fi'
-import {BiCake} from 'react-icons/Bi'
+import {BiCake} from 'react-icons/bi'
 
 const Socials = () => {
   return (
