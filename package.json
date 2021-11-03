@@ -1,10 +1,11 @@
 {
-  "name": "edwinanciani.github.io",
+  "name": "anciani.io",
   "version": "1.0.0",
   "description": "Edwin's Website",
   "scripts": {
     "dev": "next dev -H 0.0.0.0",
     "build": "next build",
+    "start": "next start",
     "prettier": "prettier -write .",
     "lint": "next lint"
   },
