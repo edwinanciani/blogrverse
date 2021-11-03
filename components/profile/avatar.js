@@ -1,11 +1,9 @@
 import {Box, Text, Heading, Stack, Button, Avatar} from '@chakra-ui/react'
-import {IoLogoAngular, IoLogoJavascript, IoLogoReact} from 'react-icons/io'
+import {IoLogoAngular, IoLogoJavascript} from 'react-icons/io'
 import {FiMail} from 'react-icons/fi'
 import { SiReact, SiVuedotjs} from 'react-icons/si'
-import Image from 'next/image'
-import styled from '@emotion/styled'
 
-const AvatarProfile = ({profile}) => {
+const AvatarProfile = () => {
   return (
     <Box>
       <Box display='flex'>

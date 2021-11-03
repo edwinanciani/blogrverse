@@ -1,4 +1,4 @@
-import {VStack, Text, Button, Link} from '@chakra-ui/react'
+import {VStack, Button, Link} from '@chakra-ui/react'
 import {FiBriefcase, FiGithub, FiLinkedin} from 'react-icons/fi'
 
 const JobLinks = () => {

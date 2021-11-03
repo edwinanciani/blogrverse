@@ -12,7 +12,7 @@ const Badges = () => {
           {icon: <FiCode />, text: 'Developer'},
           {icon: <GiSoccerBall />, text: 'Soccer Player'},
           {icon: <FiBook />, text: 'Book Reader'},
-        ].map(({icon, size, text }) => (
+        ].map(({icon, text }) => (
           <Tag
             size="lg"
             key={text+12}

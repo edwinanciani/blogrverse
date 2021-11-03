@@ -1,4 +1,4 @@
-import { Heading, Center, Container, Spacer, VStack, Text, Button, Skeleton } from '@chakra-ui/react'
+import { Heading, Center, Container, Spacer, VStack, Text, Skeleton } from '@chakra-ui/react'
 
 const Loading = () => {
   return (
@@ -15,7 +15,7 @@ const Loading = () => {
         <VStack align="start">
           <Heading variant="page-title">
             <Text>Hi!,</Text>
-            <Text>I'm Edwin <span className="primary-text">Anciani</span></Text>
+            <Text>I&apos;m Edwin <span className="primary-text">Anciani</span></Text>
           </Heading>
           <Text>Husband, father and sometimes my daughters superhero </Text>
         </VStack>
@@ -27,7 +27,7 @@ const Loading = () => {
         <VStack align="start">
           <Heading variant="page-title">
             <Text>Hi!,</Text>
-            <Text>I'm Edwin <span className="primary-text">Anciani</span></Text>
+            <Text>I&apos;m Edwin <span className="primary-text">Anciani</span></Text>
           </Heading>
           <Text>Husband, father and sometimes my daughters superhero </Text>
         </VStack>
@@ -39,7 +39,7 @@ const Loading = () => {
         <VStack align="start">
           <Heading variant="page-title">
             <Text>Hi!,</Text>
-            <Text>I'm Edwin <span className="primary-text">Anciani</span></Text>
+            <Text>I&apos;m Edwin <span className="primary-text">Anciani</span></Text>
           </Heading>
           <Text>Husband, father and sometimes my daughters superhero </Text>
         </VStack>
@@ -51,7 +51,7 @@ const Loading = () => {
         <VStack align="start">
           <Heading variant="page-title">
             <Text>Hi!,</Text>
-            <Text>I'm Edwin <span className="primary-text">Anciani</span></Text>
+            <Text>I&apos;m Edwin <span className="primary-text">Anciani</span></Text>
           </Heading>
           <Text>Husband, father and sometimes my daughters superhero </Text>
         </VStack>

@@ -1,5 +1,4 @@
-import {Container, Box, Image} from '@chakra-ui/react'
-import { motion } from "framer-motion"
+import {Container, Box} from '@chakra-ui/react'
 const Banner = () => {
   return (
     <Container display="flex" style={{position: 'relative'}} centerContent>
