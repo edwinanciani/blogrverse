@@ -8,5 +8,4 @@ export default async function handler(req, res) {
       res.status(200).send(portfolio[0]);
     }
     res.status(request.status);
-
 }

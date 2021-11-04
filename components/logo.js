@@ -18,8 +18,11 @@ padding: 10px;
   transition: 0.2s;
 }
 `
-const Logo = () => {
-  const logoImage = `/images/a${useColorModeValue('dark', '')}.svg`
+const Logo = ({portfolio}) => {
+  let logoImage = `/images/a${useColorModeValue('dark', '')}.svg`
+  if (portfolio?.logo[0]?.url) {
+    logoImage = `${portfolio.logo[0].url}`;
+  }
   return(
     <Link href="/">
       <a>
@@ -30,7 +33,7 @@ const Logo = () => {
             fontFamily='Poppins'
             fontWeight='bold'
             ml={3}>
-            Edwin Anciani
+            {portfolio?.textLogo || portfolio?.pageTitle || 'My Portfolio'}
           </Text>
         </LogoBox>
       </a>

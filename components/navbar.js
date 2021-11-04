@@ -33,7 +33,7 @@ const LinkItem = ({href, path, children}) => {
 }
 
 const Navbar = props => {
-  const {path} = props
+  const {path, portfolio} = props
 
   return (
     <Box
@@ -53,7 +53,7 @@ const Navbar = props => {
         justify='space-between'>
           <Flex align="center" mr={5}>
             <Heading as='h1' size='lg' letterSpacing={'tighter'}>
-              <Logo />
+              <Logo portfolio={portfolio}/>
             </Heading>
           </Flex>
           <Stack
@@ -73,7 +73,7 @@ const Navbar = props => {
               <Menu>
                 <MenuButton as={IconButton} icon={<HamburgerIcon />} variant='outline' aria-label='Options'/>
                 <MenuList>
-                  <NextLink href='/' passHref>
+                  <NextLink href='/about' passHref>
                     <MenuItem as={Link}>About</MenuItem>
                   </NextLink>
                 </MenuList>

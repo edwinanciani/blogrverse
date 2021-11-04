@@ -1,11 +1,17 @@
-import {Box, HStack, Tag, TagLabel, Heading} from '@chakra-ui/react'
+import {Box, Stack, Tag, TagLabel, Heading} from '@chakra-ui/react'
 import {GiSoccerBall} from 'react-icons/gi'
 import {FiCode, FiBook} from 'react-icons/fi'
+import { motion } from "framer-motion"
+
 const Badges = () => {
   return (
     <Box mt="5">
+    <motion.div
+    initial={{opacity: 0, y: 10}}
+    animate={{opacity: 1, y: 0}}
+    transition={{ ease: "easeIn", duration: 1 }}>
       <Heading as='h4' size="md">Life Badges</Heading>
-      <HStack mt={5} spacing={4}>
+      <Stack mt={5} spacing={0} isInline wrap='wrap' align='stretch'>
         {[
           {icon: '💘', text:'Husband'},
           {icon: '👧 👧', text:'Dad'},
@@ -17,8 +23,6 @@ const Badges = () => {
             size="lg"
             key={text+12}
             borderRadius="full"
-            style={{display: 'flex', flexWrap: 'wrap'}}
-            variant='outline'
           >
             <TagLabel
             display='flex'
@@ -26,7 +30,8 @@ const Badges = () => {
             >{icon}&nbsp; {text}</TagLabel>
           </Tag>
         ))}
-      </HStack>
+      </Stack>
+      </motion.div>
     </Box>
   )
 }
