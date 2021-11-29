@@ -4,7 +4,6 @@ import {FiMail} from 'react-icons/fi'
 import { SiReact, SiVuedotjs} from 'react-icons/si'
 
 const AvatarProfile = ({profile}) => {
-  console.log(profile);
   const {avatar, name, jobTitle} = profile;
   return (
     <Box>
@@ -12,14 +11,14 @@ const AvatarProfile = ({profile}) => {
         <Avatar size="2xl" name={name} src={avatar[0]?.url}/>
         <Box p={5} maxW='sm'>
           <Heading as='h3' size='lg'>{name}</Heading>
-          <Text fontSize='sm'>{jobTitle}</Text>
+          <Text fontSize='sm' color={'primary.200'}>{jobTitle}</Text>
           <Stack justify="start" direction="row" spacing={5} mt={2}>
             <IoLogoAngular /> <SiReact /> <IoLogoJavascript /> <SiVuedotjs />
           </Stack>
         </Box>
       </Box>
       <Stack justify="center" direction="column" mt={10} p={5} spacing={4}>
-        <Button size="md" leftIcon={<FiMail />} variant="solid">
+        <Button size="md" leftIcon={<FiMail />} color={'primary.100'} variant="solid">
           Contact Me
         </Button>
       </Stack>

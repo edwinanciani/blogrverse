@@ -10,17 +10,17 @@ const JobLinks = () => {
     transition={{ ease: "easeIn", duration: 0.6 }}>
     <VStack align="start" pt={5} spacing={4}>
       <Link href='https://form.io/' isExternal>
-        <Button  leftIcon={<FiBriefcase />} color="#C3376A" variant="link" isExternal>
+        <Button  leftIcon={<FiBriefcase />} color={'primary.200'} variant="link" isExternal>
           Form.io
         </Button>
       </Link>
       <Link href='https://github.com/edwinanciani' isExternal>
-        <Button  leftIcon={<FiGithub />} color="#C3376A" variant="link" isExternal>
+        <Button  leftIcon={<FiGithub />} color={'primary.200'} variant="link" isExternal>
           Github
         </Button>
       </Link>
       <Link href='https://linkedin.com/in/edwinanciani/' isExternal>
-        <Button  leftIcon={<FiLinkedin />} color="#C3376A" variant="link" isExternal>
+        <Button  leftIcon={<FiLinkedin />} color={'primary.200'} variant="link" isExternal>
           LinkedIn
         </Button>
       </Link>

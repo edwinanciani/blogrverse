@@ -4,29 +4,26 @@ import Bio from '../components/profile/bio'
 import JobLinks from '../components/profile/joblinks'
 import Socials from '../components/profile/socials'
 import Badges from '../components/profile/badges'
-import AboutLoading from '../components/portfolio/aboutLoading'
-import useSWR from 'swr'
-const fetcher = (url) => fetch(url).then((res) => res.json());
+import { getProfile } from '../lib/formio'
 
-const About = () => {
-  const { data, error } = useSWR(
-     "/api/profile",
-     fetcher
-   );
-   if (error) return "An error has occurred.";
-   if (!data) return <AboutLoading />;
-   const profile = data.data;
+const About = ({profile}) => {
+  if (!profile) {
+    return(
+      <>Oops! Sorry</>
+    )
+  }
+   const { data } = profile;
   return (
     <Container maxW="container.xl">
         <Stack direction={{base: 'column', sm: 'column', md: 'row'}} spacing="24px" w='100%'>
           <Box p={2} w='100%'>
-            <AvatarProfile profile={profile} />
-            <JobLinks links={profile.jobLinks}/>
+            <AvatarProfile profile={data} />
+            <JobLinks links={data.jobLinks}/>
           </Box>
           <Box p={2} w='100%'>
             <Box w='100%'>
-              <Bio bio={profile.bio} />
-              <Socials info={profile} />
+              <Bio bio={data.bio} />
+              <Socials info={data} />
             </Box>
             <Box p={2} w='100%'>
               <Badges />
@@ -35,6 +32,12 @@ const About = () => {
         </Stack>
     </Container>
   )
+}
+export async function getStaticProps() {
+  const profile = await getProfile()
+  return {
+    props: { profile }
+  };
 }
 
 export default About

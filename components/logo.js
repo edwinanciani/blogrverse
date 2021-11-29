@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import {Text, useColorModeValue } from '@chakra-ui/react'
+import { Text, useColorModeValue } from '@chakra-ui/react'
 import styled from '@emotion/styled'
 
 const LogoBox = styled.span`
@@ -18,11 +18,8 @@ padding: 10px;
   transition: 0.2s;
 }
 `
-const Logo = ({portfolio}) => {
+const Logo = () => {
   let logoImage = `/images/a${useColorModeValue('dark', '')}.svg`
-  if (portfolio?.logo[0]?.url) {
-    logoImage = `${portfolio.logo[0].url}`;
-  }
   return(
     <Link href="/">
       <a>
@@ -33,7 +30,7 @@ const Logo = ({portfolio}) => {
             fontFamily='Poppins'
             fontWeight='bold'
             ml={3}>
-            {portfolio?.textLogo || portfolio?.pageTitle || 'My Portfolio'}
+            Edwin Anciani
           </Text>
         </LogoBox>
       </a>
