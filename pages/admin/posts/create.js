@@ -10,7 +10,6 @@ import { Description } from '../../../components/blog/admin/Plugins/Description'
 const AdminPostDetails = () => {
   const [submission, setSubmission] = useState({data: {}})
   const getTitle = (event) => {
-    console.log(event);
     submission.data.title = event
     setSubmission(submission)
   }

@@ -4,7 +4,7 @@ import { Spinner, Button } from "@chakra-ui/react"
 import { useState } from "react"
 import {firestore, fromMillis } from '../../lib/firebase'
 const LIMIT = 10
-const Feed = ({data, category}) => {
+const Feed = ({data, category, portfolio}) => {
   const [postsEnd, setPostsEnd] = useState(false)
   const [posts, setPosts] = useState(data)
   const [loading, setLoading] = useState(false)
@@ -34,7 +34,7 @@ const Feed = ({data, category}) => {
         posts.map((post) => {
           // Item
           return <Box p={4} w="100%" alignItems="start" key={post.slug}>
-            <FeedItem post={post}/>
+            <FeedItem portfolio={portfolio} post={post}/>
           </Box>
         })
       }

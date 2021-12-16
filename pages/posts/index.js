@@ -20,7 +20,6 @@ const Posts = ({portfolio, posts}) => {
   if(!portfolio) {
     return <>Portfolio not found</>
   }
-  console.log(posts);
   return (
     <>
      <Head>
@@ -31,7 +30,7 @@ const Posts = ({portfolio, posts}) => {
         initial={{opacity: 0, y: 10}}
         animate={{opacity: 1, y: 0}}
         transition={{ ease: "easeIn", duration: 0.5 }}>
-          <Feed data={posts} />
+          <Feed portfolio={portfolio} data={posts} />
       </motion.div>
     </>
   )

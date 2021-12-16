@@ -25,10 +25,9 @@ const Portfolio = () => {
     return {username, user}
   }, [user, username])
   const onSubmit = async (submission) => {
-    console.log(submission);
     const ref = firestore.collection('portfolios').doc(route.query.username)
     const updated = await ref.update(submission.data)
-    console.log(updated);
+    return updated
   }
   return (
     <Container>

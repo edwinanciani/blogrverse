@@ -3,7 +3,7 @@ import { Image } from "@chakra-ui/image"
 import { Box, Heading, HStack, Link, Text, VStack } from "@chakra-ui/layout"
 import { Tag } from "@chakra-ui/tag"
 
-const FeedItem = ({post}) => {
+const FeedItem = ({portfolio, post}) => {
   console.log(post);
   return (<Box maxW="100%" minW="100%" maxH="200px" w={'100%'} py={8}>
    <VStack minH="100%" h="100%" w='100%' mb={4} alignItems={'start'} spacing={3}
@@ -12,7 +12,7 @@ const FeedItem = ({post}) => {
         <VStack align="start" spacing={4} justify="space-around" minW="70%" maxW="70%">
         <BlogTags tags={post.categories} />
         <Heading px="2" as="h4" size="md" marginTop="1">
-          <Link href={`/universe/@${post.author}/${post.slug}`} textDecoration="none" _hover={{ textDecoration: 'none' }}>
+          <Link href={portfolio? `/posts/${post.slug}` :`/universe/@${post.author}/${post.slug}`} textDecoration="none" _hover={{ textDecoration: 'none' }}>
             {post.title}
           </Link>
         </Heading>

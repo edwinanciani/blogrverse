@@ -1,4 +1,3 @@
-import {  getPosts } from '../../lib/formio'
 import { Box, Stack, Divider } from '@chakra-ui/react'
 import Article from '../../components/blog/posts/Article'
 // import OnThisPost from '../../components/blog/posts/OnThisPost'
@@ -6,8 +5,21 @@ import Article from '../../components/blog/posts/Article'
 import ActionButtons from '../../components/blog/posts/ActionButtons'
 import Breadcrumbs from '../../components/Breadcrumb'
 import { firestore, postToJSON } from '../../lib/firebase'
+import { getUsername } from '../../lib/config'
+import { useContext, useEffect } from 'react'
+import { PortfolioContext } from '../../lib/context'
 
-const PostDetails = ({ post}) => {
+const PostDetails = ({ post, portfolio}) => {
+ const {actions} = useContext(PortfolioContext)
+  useEffect(() => {
+    if (!portfolio) {
+      return;
+    }
+    actions.set(portfolio)
+  }, [portfolio, actions])
+  if(!portfolio) {
+    return <>Portfolio not found</>
+  }
   return (
     <>
       <Breadcrumbs paths={{current: {name: post?.data?.title}, past: {name: 'Posts', path: '/posts'}}} />
@@ -28,7 +40,8 @@ const PostDetails = ({ post}) => {
 
   )
 }
-export async function getStaticProps({params}) {
+export async function getServerSideProps({req, params}) {
+  const username = getUsername(req)
   const {slug } = params
   const ref = firestore.collection('posts').doc(slug)
   const post = postToJSON(await ref.get()) || null
@@ -38,21 +51,18 @@ export async function getStaticProps({params}) {
       notFound: true,
     };
   }
-  return {
-    props: { post, path }
-  }
-}
-export async function getStaticPaths() {
-  const posts = await getPosts({limit: 9999})
-  const paths = posts.map(post => {
-    const {slug} = post.data;
+  try {
+    const ref = firestore.collection('portfolios').doc(username) 
+    const portfolio = postToJSON(await ref.get())
     return {
-      params: {slug}
+      props: { portfolio, post, path }
+    };
+  }  catch (err){
+      return {
+        notFound: true,
+        props: {username}
+      }
     }
-  })
-  return {
-    paths,
-    fallback: 'blocking'
-  }
 }
+
 export default PostDetails

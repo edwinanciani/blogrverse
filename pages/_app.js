@@ -25,8 +25,6 @@ const Website = ({Component, pageProps, router}) => {
      primary[color.variant] = color.hex
    })
    theme.colors = {...theme.colors, primary}
-   console.log(theme);
-   console.log(primary);
    const newTheme = extendTheme({
      colors: {
        primary
@@ -34,7 +32,6 @@ const Website = ({Component, pageProps, router}) => {
    })
    setThemes(newTheme) 
  }, [portfolio])
- console.log(theme);
   // ADD profile context
   return (
     <UserContext.Provider value={userData}>

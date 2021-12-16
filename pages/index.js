@@ -85,7 +85,6 @@ export async function getServerSideProps({req}) {
   let redirect = false
   if (username === 'redirectHome') {
    redirect = true
-   console.log(username);
    return {
      props: {
        portfolio: null,
