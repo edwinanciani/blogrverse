@@ -1,15 +1,15 @@
-import { Text, Editable, EditableInput, EditablePreview } from '@chakra-ui/react'
+import { Heading, Editable, EditableInput, EditablePreview } from '@chakra-ui/react'
 import React from 'react'
 
-export const Description = ({onDescription}) => {
+export const Description = ({onDescription, edit, description}) => {
   return (
     <div>
-      <Text pb={4} as="h3" size="sm" color="gray">
-        <Editable onChange={onDescription} placeholder="Small Description" submitOnBlur={true}>
+      <Heading pb={10} as="h3" size="sm" color="gray">
+        <Editable onChange={onDescription} value={description} isDisable={edit} placeholder="Small Description" submitOnBlur={true}>
           <EditableInput></EditableInput>
           <EditablePreview></EditablePreview>
         </Editable>
-      </Text>
+      </Heading>
     </div>
   )
 }

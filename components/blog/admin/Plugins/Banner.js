@@ -13,6 +13,9 @@ export const Banner = ({setImage, getImage}) => {
   const [bannerImage, setBannerImage] = useState(setImage)
   const setImageInBanner = (image) => {
     setBannerImage(image)
+    if(getImage) {
+      getImage(image)
+    }
   }
   return (
     <div>

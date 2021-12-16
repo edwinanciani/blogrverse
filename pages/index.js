@@ -1,19 +1,30 @@
-import { Heading, Center, Container, Spacer, VStack, Text, Button } from '@chakra-ui/react'
+import { Heading, Center, Container, Spacer, VStack, Text, HStack } from '@chakra-ui/react'
 import Banner from '../components/banner'
-import {BsArrowRight} from 'react-icons/bs'
 import {motion} from 'framer-motion'
-import { getPortfolio } from '../lib/formio'
-import InlineComponent from '../components/RenderComponents'
-
+import { firestore, postToJSON } from '../lib/firebase'
+import { getUsername } from '../lib/config'
+import Head from 'next/head'
+import { useRouter } from 'next/router'
+import { useContext, useEffect} from 'react'
+import { PortfolioContext } from '../lib/context'
 const Page = ({ portfolio }) => {
-  if (!portfolio) {
-    return (
-      <>Error My frend</>
-    )
+  const router = useRouter()
+  const {actions} = useContext(PortfolioContext)
+  useEffect(() => {
+    if (!portfolio) {
+      router.push('/universe')
+    }
+    actions.set(portfolio)
+  }, [portfolio])
+  if(!portfolio) {
+    return <>Traveling to the blogrverse</>
   }
-  const {data} = portfolio
+  const data = portfolio
   return (
     <Container maxW='container.xl'>
+    <Head>
+      <title>{data.pageTitle}</title>
+    </Head>
       <motion.div
         initial={{opacity: 0, y: 10}}
         animate={{opacity: 1, y: 0}}
@@ -30,7 +41,7 @@ const Page = ({ portfolio }) => {
             <VStack align="start">
               <Heading variant="page-title">
                 <Text>{data.bannerText1}</Text>
-                <Text>{data.bannerText2} <span className="primary-text">{data.bannerText3}</span></Text>
+               <HStack> <Text>{data.bannerText2}</Text> <Text  color='primary.100'>{data.bannerText3}</Text></HStack>
               </Heading>
               <Text>{data.shortDescription}</Text>
             </VStack>
@@ -43,12 +54,16 @@ const Page = ({ portfolio }) => {
               { data.interestPoints.map((bullet) =>
               {
                 if (bullet.colorSelect === 'secondText') {
-                  return (<Heading as="h2">
-                    {bullet.firstText} <span className="primary-text">{bullet.secondText}</span>
+                  return (<Heading as="h2" display={'flex'}>
+                    <HStack>
+                     <span> {bullet.firstText}</span> <Text color={'primary.100'}>{bullet.secondText}</Text>
+                    </HStack>
                   </Heading>)
                 } else {
                   return (<Heading as="h2">
-                    <span className="primary-text">{bullet.firstText} </span> {bullet.secondText}
+                    <HStack>
+                      <Text color={'primary.100'}>{bullet.firstText} </Text> <span>{bullet.secondText}</span>
+                    </HStack>
                   </Heading>)
                 }
               })
@@ -58,18 +73,39 @@ const Page = ({ portfolio }) => {
 
           <Spacer />
           <Center p={5} align='start'>
-           <InlineComponent /> 
+              Latest Posts or works
           </Center>
         </Container>
       </motion.div>
     </Container>
   )
 }
-export async function getStaticProps() {
-  const portfolio = await getPortfolio()
-  return {
-    props: { portfolio }
-  };
+export async function getServerSideProps({req}) {
+  const username = getUsername(req)
+  let redirect = false
+  if (username === 'redirectHome') {
+   redirect = true
+   console.log(username);
+   return {
+     props: {
+       portfolio: null,
+       redirect
+     }
+   }
+  }
+  try {
+    const ref = firestore.collection('portfolios').doc(username) 
+    const portfolio = postToJSON(await ref.get())
+    return {
+      props: { portfolio, redirect }
+    };
+  }
+  catch (err){
+    return {
+      notFound: true,
+      props: {username}
+    }
+  }
 }
 
 export default Page

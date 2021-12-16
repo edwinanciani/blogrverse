@@ -206,3 +206,6 @@ thead, tbody, tfoot, tr, td, th {
 .editorText_dark .DraftEditor-root .paragraph span{
   color: var(--chakra-colors-whiteAlpha-900) !important;
 }
+.editorText_dark .DraftEditor-root h2 span{
+  color: var(--chakra-colors-whiteAlpha-900) !important;
+}

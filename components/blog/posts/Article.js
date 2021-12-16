@@ -1,18 +1,18 @@
 import { Box} from '@chakra-ui/react'
-import RenderComponents from './RenderComponents'
 import ArticleHeader from './ArticleHeader'
 import ArticleFooter from './ArticleFooter'
+import Editor from '../admin/Editor'
 
 const Article = ({post}) => {
   if (!post) {
     return 'Not Found'
   }
-  const {data} = post
   return (
     <Box as={`article`} >
-      <ArticleHeader content={data} />
-      <RenderComponents post={data} />
-      <ArticleFooter/>
+      <ArticleHeader content={post} />
+      <Editor setContent={post.content} edit={true}  />
+      {/* Some integrations like donations */}
+      {/* <ArticleFooter/> */}
     </Box>
   )
 }

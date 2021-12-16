@@ -1,10 +1,26 @@
-import { getPosts } from '../../lib/formio'
-import {Heading, SimpleGrid } from '@chakra-ui/react'
+import {Heading } from '@chakra-ui/react'
 import Head from 'next/head'
-import PostCard from '../../components/blog/posts/PostCard'
 import { motion } from 'framer-motion'
+import { firestore, postToJSON } from '../../lib/firebase'
+import Feed from '../../components/blogrverse/Feed'
+import { getUsername } from '../../lib/config'
+import { useContext } from 'react'
+import { PortfolioContext } from '../../lib/context'
+import { useEffect } from 'react'
 
-const Posts = ({posts}) => {
+
+const Posts = ({portfolio, posts}) => {
+  const {actions} = useContext(PortfolioContext)
+  useEffect(() => {
+    if (!portfolio) {
+      return;
+    }
+    actions.set(portfolio)
+  }, [portfolio])
+  if(!portfolio) {
+    return <>Portfolio not found</>
+  }
+  console.log(posts);
   return (
     <>
      <Head>
@@ -15,23 +31,30 @@ const Posts = ({posts}) => {
         initial={{opacity: 0, y: 10}}
         animate={{opacity: 1, y: 0}}
         transition={{ ease: "easeIn", duration: 0.5 }}>
-          <SimpleGrid py={10} px={0} columns={[1, null, 3]} spacing={[10]}>
-            {posts.map((post) => {
-              return (
-                <>
-                  <PostCard key={post._id} post={post} />
-                </>
-              )
-            })}
-        </SimpleGrid>
+          <Feed data={posts} />
       </motion.div>
     </>
   )
 }
-export async function getStaticProps() {
-  const posts = (await getPosts({limit: 10})) || []
-  return {
-    props: { posts }
-  }
+export async function getServerSideProps({req}) {
+  const username = getUsername(req)
+  const postsQuery = firestore.collection('posts')
+  .where('author', '==', username)
+  .where('public', '==', true)
+  .orderBy('created', 'desc')
+  .limit(10)
+  const posts = (await postsQuery.get()).docs.map(postToJSON)
+  try {
+    const ref = firestore.collection('portfolios').doc(username) 
+    const portfolio = postToJSON(await ref.get())
+    return {
+      props: { portfolio, posts }
+    };
+  }  catch (err){
+      return {
+        notFound: true,
+        props: {username}
+      }
+    }
 }
 export default Posts

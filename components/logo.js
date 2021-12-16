@@ -18,7 +18,7 @@ padding: 10px;
   transition: 0.2s;
 }
 `
-const Logo = () => {
+const Logo = ({logo, username}) => {
   let logoImage = `/images/a${useColorModeValue('dark', '')}.svg`
   return(
     <Link href="/">
@@ -30,7 +30,7 @@ const Logo = () => {
             fontFamily='Poppins'
             fontWeight='bold'
             ml={3}>
-            Edwin Anciani
+            {username ? username : 'blogrverse' }
           </Text>
         </LogoBox>
       </a>

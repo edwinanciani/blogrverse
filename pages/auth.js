@@ -13,14 +13,16 @@ import {
 } from '@chakra-ui/react'
 import { FaLock } from 'react-icons/fa'
 import Head from 'next/head'
-import { auth } from '../../lib/firebase'
+import { auth } from '../lib/firebase'
 import { useContext } from 'react'
-import { UserContext } from '../../lib/context'
+import { UserContext } from '../lib/context'
 import { toast, Toaster } from 'react-hot-toast'
 import {useState } from 'react'
+import { useRouter } from 'next/router'
 
 const AuthPage = () => {
   const logoImage = `/images/a${useColorModeValue('dark', '')}.svg`
+  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const {user} = useContext(UserContext)
@@ -79,7 +81,7 @@ const AuthPage = () => {
                      />
                    </FormControl>
 
-                   <Button type="submit" color={'primary.200'} size="lg" fontSize="md" onClick={() => SignIn(email, password)}>
+                   <Button type="submit" color={'primary.200'} size="lg" fontSize="md" onClick={() => SignIn(email, password).then(()=>router.push('/universe') )}>
                      Sign in
                    </Button>
                  </Stack>

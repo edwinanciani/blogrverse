@@ -4,15 +4,24 @@ import Bio from '../components/profile/bio'
 import JobLinks from '../components/profile/joblinks'
 import Socials from '../components/profile/socials'
 import Badges from '../components/profile/badges'
-import { getProfile } from '../lib/formio'
+import { firestore, postToJSON } from '../lib/firebase'
+import { getUsername } from '../lib/config'
+import { useContext, useEffect } from 'react'
+import { PortfolioContext } from '../lib/context'
 
-const About = ({profile}) => {
-  if (!profile) {
-    return(
-      <>Oops! Sorry</>
-    )
+const About = ({portfolio}) => {
+  const {actions} = useContext(PortfolioContext)
+  useEffect(() => {
+    if (!portfolio) {
+      return;
+    }
+    actions.set(portfolio)
+  }, [portfolio])
+  if(!portfolio) {
+    return <>Portfolio not found</>
   }
-   const { data } = profile;
+   const {about} = portfolio;
+   const data = about
   return (
     <Container maxW="container.xl">
         <Stack direction={{base: 'column', sm: 'column', md: 'row'}} spacing="24px" w='100%'>
@@ -33,10 +42,12 @@ const About = ({profile}) => {
     </Container>
   )
 }
-export async function getStaticProps() {
-  const profile = await getProfile()
+export async function getServerSideProps({req}) {
+  const username = getUsername(req)
+  const ref = firestore.collection('portfolios').doc(username)
+  const portfolio = postToJSON(await ref.get())
   return {
-    props: { profile }
+    props: { portfolio }
   };
 }
 

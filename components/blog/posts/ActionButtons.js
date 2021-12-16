@@ -12,7 +12,7 @@ const ActionButtons = () => {
         Share
       </Button>
       <Button bg={bg} _hover={{background: 'primary.300'}} color={color} leftIcon={<AiOutlineLike />} _focus={{background: 'primary.300', boxShadow: "0 0 1px 2px #C3376a, 0 1px 1px #C3376a"}}>
-        Give Love
+        Tip!
       </Button>
       <Coffee bg={bg} color={color} />
 

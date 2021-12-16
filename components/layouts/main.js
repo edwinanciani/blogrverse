@@ -8,7 +8,7 @@ const Main = ({children, router}) => {
     <Box as="main">
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <title>Edwin Anciani HomePage</title>
+        <title>blogrverse</title>
       </Head>
       <Navbar path={router.asPath} />
       <Container py={12} px={12} maxW='container.2xl'>

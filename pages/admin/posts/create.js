@@ -22,6 +22,10 @@ const AdminPostDetails = () => {
     submission.data.content = JSON.parse(event)
     setSubmission(submission)
   }
+  const getBanner = (banner) => {
+    submission.data.banner = banner
+    setSubmission(submission)
+  }
   return (
     <Box py={12}>
       <Breadcrumbs paths={{current: {name: 'Creating Post'}, past: {name: 'Admin Posts', path: '/admin'}}} />
@@ -32,7 +36,7 @@ const AdminPostDetails = () => {
         <Box w={'80%'} px={2} py={2}>
           <Title onTitle={getTitle}></Title>
           <Description onDescription={getDescription} />
-          <Banner></Banner>
+          <Banner getImage={getBanner}></Banner>
           {
               typeof window !== "undefined" ? <Editor content={getContent} />: <Text>Editor not Loaded</Text>
           }

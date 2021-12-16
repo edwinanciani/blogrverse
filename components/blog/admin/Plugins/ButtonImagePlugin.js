@@ -25,7 +25,11 @@ export const ButtonImagePlugin = ({onChange, className, editorState}) => {
   return (
     <div>
        <button className={className} onClick={onOpen}>
-        <BsCardImage fontSize="sm" size="sm"/>
+        <BsCardImage style={{
+          position: 'absolute',
+          top: '7px',
+          height: '20px'
+        }} fontSize="sm" size="sm"/>
       </button>
       <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

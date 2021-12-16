@@ -1,26 +1,29 @@
 import { Heading, Stack, FormControl, FormLabel, Switch, Box, Button } from '@chakra-ui/react'
 import { IoPushOutline } from 'react-icons/io5'
 import AsyncCreatableSelect from 'react-select/async-creatable'
-import React, {useState} from 'react'
+import React, {useState, useContext} from 'react'
 import { getCategories, postCategories, sendPost } from '../../../../lib/formio'
 import { toast, Toaster } from 'react-hot-toast'
-
+import { UserContext } from '../../../../lib/context'
+import { auth, firestore, serverTimestamp } from '../../../../lib/firebase'
+import kebabCase from 'lodash.kebabcase';
 
 export const Action = ({data}) => {
   const [submission, setSubmission] = useState(data)
   const [categories, setCategories] = useState([])
-
+  const {username } = useContext(UserContext)
 
   const savePost = async () => {
     console.log(submission);
-    // create slug
-    submission.data.slug = submission.data.title.replace(/\s/g, '-').toLowerCase();
+    const slug = encodeURI(kebabCase(submission.data.title))
+    const uid = auth.currentUser.uid
+    const postRef = firestore.collection('posts').doc(slug)
     // create categories
-    createCategories(categories).then((cats) => {
+    await createCategories(categories, {username,slug,title: submission.data.title}).then(async (cats) => {
       submission.data.categories = cats;
-      sendPost(submission).then(post => {
-        toast.success(`${post.data.slug} created!`)
-      })
+      const data = {...submission.data, slug, created: serverTimestamp(), modified: serverTimestamp(), tips: 0, author: username, uid}
+      await postRef.set(data)
+      toast.success(`${slug} created!`)
     })
   }
   
@@ -90,21 +93,22 @@ export const Action = ({data}) => {
     </>
   )
 }
-const createCategories = (categories) => {
+const createCategories = (categories, post) => {
   return new Promise ((resolve, reject) => {
   if(categories.length === 0) {
     return;
   }
   let count = 0;
   let saveCategories = [];
-  let sendCategory =  () => {
+  const catRef = firestore.collection('categories')
+  let sendCategory =  async () => {
     if(categories[count]) {
       if(categories[count].__isNew__) {
-        postCategories({data: categories[0]}).then((response) => {
-          saveCategories.push(response.data.value)
-          count++
-          sendCategory()
-        })
+        const cat = await catRef.doc(categories[count].value)
+        cat.set({name: categories[count].value, value: categories[count].value, post })
+        saveCategories.push(categories[count].value)
+        count++
+        sendCategory()
       } else {
         saveCategories.push(categories[count].value)
         count++

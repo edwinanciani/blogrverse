@@ -1,29 +1,40 @@
-import { Box, Button, FormControl, FormLabel, Grid, Heading, Stack, Switch, Text } from '@chakra-ui/react'
+import {HStack, Text, Link, Box, Button, FormControl, FormLabel, Grid, Heading, Stack, Switch, Image } from '@chakra-ui/react'
 import Breadcrumbs from '../../../components/Breadcrumb'
-import dynamic from 'next/dynamic'
-import { config, getPostBySlug } from '../../../lib/formio'
-import 'formiojs/dist/formio.full.css'
+import {  getPostBySlug, sendPost } from '../../../lib/formio'
 import { AiOutlineEdit, AiOutlineEye } from 'react-icons/ai'
 import { useState } from 'react'
-import RenderComponents from '../../../components/blog/posts/RenderComponents'
-
-const Form = dynamic(() => import('@formio/react').then(module => module.Form), {ssr: false})
+import Editor from '../../../components/blog/admin/Editor'
+import { Title } from '../../../components/blog/admin/Plugins/Title'
+import { Description } from '../../../components/blog/admin/Plugins/Description'
+import toast from 'react-hot-toast'
+import { Banner } from '../../../components/blog/admin/Plugins/Banner'
 
 const AdminPostDetails = ({post}) => {
-  const [preview, setPreview] = useState(null)
+  const [preview, setPreview] = useState(true)
   const [submission, setSubmission] = useState(post)
   if(!post) {
     return (<Heading>Post Not Found</Heading>)
   }
-  const onChangeHandler = (event) => {
-    console.log(event)
-    if (event.changed) {
-      submission.data = event.data;
-    }
-    console.log(submission)
+  const getContent = (content) => {
+    submission.data.content = content
+    setSubmission(submission)
   }
-  const submitForm = (event) => {
-    setSubmission(event);
+  const getTitle = (title) => {
+    submission.data.title = title
+    setSubmission(submission)
+  }
+  const getDescription = (desc) => {
+    submission.data.description = desc
+    setSubmission(desc)
+  }
+  const savePost = (newPostData) => {
+    sendPost(newPostData).then(() => {
+      toast.success('Post has been edited!')
+    })
+  }
+  const getBanner = (banner) => {
+    submission.data.banner = banner
+    setSubmission(submission)
   }
   return (
     <Box py={12}>
@@ -32,11 +43,24 @@ const AdminPostDetails = ({post}) => {
             templateColumns="repeat(1, 3fr 1fr)"
             gap={0}>
         <Box w={'80%'} px={2} py={2}>
-          <Heading as={'h2'} py={2} size={'md'}>{post.data.title}</Heading>
+          {!preview ?<>
+            <Title edit={preview} onTitle={getTitle} title={post.data.title}/>
+            <Description edit={preview} onDescription={getDescription} description={post.data.description} />
+            <Banner setImage={post.data.banner ? post.data.banner : null} getImage={getBanner}/>
+          </>:
+          <>
+          <Heading as={'h1'} py={10} >{post.data.title}</Heading>
+          <Heading as={'h3'} pb={10} color='gray' colorScheme="gray" size={'sm'}>{post.data.description}</Heading>
+          { post.data.banner?<><Box borderRadius={10} overflow={'hidden'}><Image src={post.data.banner?.urls.regular} w={'100%'} h={'100%'} alt={post.data.banner?.alt_description}/>
+           </Box>
+      <HStack alignItems="center" mb={8} justify="center">
+      <Text color="gray.400">By {`${post.data.banner.user.first_name} ${post.data.banner.user.last_name}`}</Text>
+      <Link href={post.data.banner.user.portfolio_url}>{`@${post.data.banner.user.username}`}</Link>
+    </HStack></>: null}
+          </>}
+
           {
-            !preview ?
-            typeof window !== "undefined" && submission ? <Form submission={submission} onChange={onChangeHandler} src={config.posts.form} onSubmit={submitForm } /> : <Text>Form not Loaded</Text>
-              : <RenderComponents post={submission.data} />
+            <Editor content={getContent} setContent={post.data.content} edit={preview}/>
           }
         </Box>
         <Box w={'100%'} p={6}>
@@ -49,6 +73,7 @@ const AdminPostDetails = ({post}) => {
                 colorScheme="teal"
                 isLoading={false}
                 type="submit"
+                onClick={() => setPreview(false)}
               >
                 Edit
               </Button>
@@ -58,9 +83,20 @@ const AdminPostDetails = ({post}) => {
                 colorScheme="teal"
                 isLoading={false}
                 type="submit"
-                onClick={() => setPreview(!preview)}
+                onClick={() => setPreview(true)}
               >
                 Preview
+              </Button>
+              <Button
+                mt={4}
+                leftIcon={<AiOutlineEye />}
+                colorScheme="blue"
+                variant='outline'
+                isLoading={false}
+                type="submit"
+                onClick={() => savePost(submission)}
+              >
+                Save Post
               </Button>
             </Stack>
             <FormControl py={6} display="flex" alignItems="center">
