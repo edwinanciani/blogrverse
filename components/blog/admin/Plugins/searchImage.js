@@ -1,5 +1,4 @@
-import { SearchIcon } from '@chakra-ui/icons'
-import {InputGroup, InputLeftElement, Input, InputRightElement, Box, Grid, Image, Spinner, HStack} from '@chakra-ui/react'
+import {InputGroup, Input,  Box, Grid, Image,  HStack } from '@chakra-ui/react'
 import { useState} from 'react'
 import { toast, Toaster } from 'react-hot-toast'
 const SearchImage = ({onImage}) => {
@@ -30,14 +29,8 @@ const SearchImage = ({onImage}) => {
     <Box w="100%" display="block">
     <Toaster />
     <InputGroup w="100%" maxW="700px">
-      <InputLeftElement
-        pointerEvents="none"
-        color="gray.300"
-        fontSize="1.2em"
-        children={<SearchIcon />}
-      />
       <Input placeholder="Search Image then hit Enter" tabIndex={0} onKeyDown={searchImage} width="100%"  variant="" isDisabled={disabled}/>
-      { disabled ? <InputRightElement children={<Spinner />}/> : null }
+      { disabled ? '' : null }
     </InputGroup>
    {images.length > 0 ? 
     <Box>

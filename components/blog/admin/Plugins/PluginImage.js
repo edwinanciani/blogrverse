@@ -1,9 +1,10 @@
 import { ButtonImagePlugin } from './ButtonImagePlugin'
 import ImageRenderer from './ImageRenderer'
 
-export default {
+const Plugin = {
     title: "Search Image",
     type: "image",
     buttonComponent: ButtonImagePlugin,
     blockComponent: ImageRenderer
  }
+export default Plugin

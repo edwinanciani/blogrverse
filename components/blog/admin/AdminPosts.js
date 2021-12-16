@@ -9,10 +9,13 @@ import { useRouter } from 'next/router'
 const AdminPosts = () => {
   const [posts, setPosts] = useState(null)
   const router = useRouter()
-  useEffect(async () => {
+  useEffect(() => {
     if(!posts) {
-      const request = await getPosts({})
-      setPosts(request)
+      async function fetchData() {
+        const request = await getPosts({})
+        setPosts(request)
+      }
+      fetchData()
     }
   }, [posts])
   if(!posts || posts.length === 0) {
@@ -28,7 +31,7 @@ const AdminPosts = () => {
         Create New Post
       </Button></Heading>
       {posts.map(post => {
-        return <Link key={post._id}  href={`/admin/posts/${post.data.slug}`}>
+        return <Link key={post._id} passHref href={`/admin/posts/${post.data.slug}`}>
           <Box maxW="100%" my={5} borderWidth="1px" borderRadius="lg" overflow="hidden">
             <Stack direction={['vertical']}>
               <Image src={post.data.banner || `https://via.placeholder.com/500`} alt="placeholder" width={'30%'} height="250px"/>

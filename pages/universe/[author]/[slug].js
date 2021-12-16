@@ -4,9 +4,9 @@ import Article from '../../../components/blog/posts/Article'
 // import RelatedPosts from '../../components/blog/posts/RelatedPosts'
 import ActionButtons from '../../../components/blog/posts/ActionButtons'
 import Breadcrumbs from '../../../components/Breadcrumb'
-import { firestore, getUserWithUsername, postToJSON } from '../../../lib/firebase'
+import { firestore,  postToJSON } from '../../../lib/firebase'
 
-const UniversePost = ({ post, path }) => {
+const UniversePost = ({ post}) => {
   return (
     <>
       <Breadcrumbs paths={{current: {name: post?.title}, past: {name: 'Universe', path: '/universe'}}} />

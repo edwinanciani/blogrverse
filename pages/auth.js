@@ -43,7 +43,7 @@ const AuthPage = () => {
         py="12"
         px={{ base: '2', lg: '8' }}
       >
-        <Image mx="auto" h="8" mb={{ base: '10', md: '20' }} src={logoImage} />
+        <Image mx="auto" h="8" mb={{ base: '10', md: '20' }} src={logoImage} alt="logo" />
         <Heading textAlign="center" size="xl" fontWeight="extrabold">
         Sign in
       </Heading>

@@ -1,6 +1,5 @@
 // On This Post Link Related ( Docs, Helpers or Videos)
 import { Box, Heading, List, ListIcon, ListItem } from '@chakra-ui/react'
-import Link from 'next/link'
 import { FaCheckCircle } from 'react-icons/fa'
 
 const OnThisPost = ({highlights}) => {

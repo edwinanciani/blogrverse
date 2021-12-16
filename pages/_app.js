@@ -5,11 +5,11 @@ import Fonts from '../components/fonts'
 import '../styles/global.css'
 import { PortfolioContext, UserContext } from '../lib/context'
 import { useUserData } from '../lib/hook'
-import { useState, useContext, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 const Website = ({Component, pageProps, router}) => {
   const userData = useUserData()
   const [portfolio, setPortfolio] = useState(null)
-  const [actions, setActions] = useState({
+  const [actions] = useState({
     set: context => setPortfolio(context)
   })
   const [themes, setThemes] = useState(theme)

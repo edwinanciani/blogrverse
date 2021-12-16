@@ -2,7 +2,7 @@ import { Heading, Stack, FormControl, FormLabel, Switch, Box, Button } from '@ch
 import { IoPushOutline } from 'react-icons/io5'
 import AsyncCreatableSelect from 'react-select/async-creatable'
 import React, {useState, useContext} from 'react'
-import { getCategories, postCategories, sendPost } from '../../../../lib/formio'
+import { getCategories } from '../../../../lib/formio'
 import { toast, Toaster } from 'react-hot-toast'
 import { UserContext } from '../../../../lib/context'
 import { auth, firestore, serverTimestamp } from '../../../../lib/firebase'
@@ -94,7 +94,7 @@ export const Action = ({data}) => {
   )
 }
 const createCategories = (categories, post) => {
-  return new Promise ((resolve, reject) => {
+  return new Promise ((resolve) => {
   if(categories.length === 0) {
     return;
   }

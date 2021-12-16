@@ -4,7 +4,7 @@ import {
 import {MegadraftEditor, editorStateFromRaw, editorStateToJSON} from 'megadraft'
 import 'megadraft/dist/css/megadraft.css'
 import {Box, useColorModeValue} from '@chakra-ui/react'
-import PluginImage from './Plugins/PluginImage'
+import Plugin from './Plugins/PluginImage'
 
 const Editor = ({content, setContent, edit}) => {
   const [editorState, setEditorState] = useState(editorStateFromRaw(setContent))
@@ -16,7 +16,7 @@ const Editor = ({content, setContent, edit}) => {
         onChange={(event) => {
           content(editorStateToJSON(event)) 
           setEditorState(event)}}
-          plugins={[PluginImage]}
+          plugins={[Plugin]}
           readOnly={edit}
         placeholder='Add some text'/>
     </Box>

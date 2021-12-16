@@ -15,7 +15,7 @@ const Page = ({ portfolio }) => {
       router.push('/universe')
     }
     actions.set(portfolio)
-  }, [portfolio])
+  }, [portfolio, actions])
   if(!portfolio) {
     return <>Traveling to the blogrverse</>
   }

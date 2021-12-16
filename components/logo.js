@@ -18,7 +18,7 @@ padding: 10px;
   transition: 0.2s;
 }
 `
-const Logo = ({logo, username}) => {
+const Logo = ({ username}) => {
   let logoImage = `/images/a${useColorModeValue('dark', '')}.svg`
   return(
     <Link href="/">

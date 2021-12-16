@@ -4,7 +4,7 @@ import { UserContext } from '../../../lib/context'
 import dynamic from 'next/dynamic'
 import { config } from '../../../lib/formio'
 import { firestore, postToJSON } from '../../../lib/firebase'
-import { Box, Container } from '@chakra-ui/react'
+import { Container } from '@chakra-ui/react'
 
 const FormComponent = dynamic(() => import('../../../components/Form'), {ssr: false})
 const Portfolio = () => {

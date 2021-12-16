@@ -1,6 +1,6 @@
 const LatestPosts = () => {
   return (
-    
+   <>Latest Posts</> 
   )
 }
 

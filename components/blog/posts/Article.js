@@ -1,6 +1,5 @@
 import { Box} from '@chakra-ui/react'
 import ArticleHeader from './ArticleHeader'
-import ArticleFooter from './ArticleFooter'
 import Editor from '../admin/Editor'
 
 const Article = ({post}) => {

@@ -16,7 +16,7 @@ const Posts = ({portfolio, posts}) => {
       return;
     }
     actions.set(portfolio)
-  }, [portfolio])
+  }, [portfolio, actions])
   if(!portfolio) {
     return <>Portfolio not found</>
   }

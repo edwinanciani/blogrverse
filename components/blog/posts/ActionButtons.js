@@ -1,5 +1,5 @@
-import { Button, Box, Stack, useColorModeValue } from '@chakra-ui/react'
-import { BiShare, BiCoffee } from 'react-icons/bi'
+import { Button,  Stack, useColorModeValue } from '@chakra-ui/react'
+import { BiShare } from 'react-icons/bi'
 import { AiOutlineLike } from 'react-icons/ai'
 import Coffee from '../../Coffee'
 

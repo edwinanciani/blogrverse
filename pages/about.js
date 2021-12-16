@@ -16,7 +16,7 @@ const About = ({portfolio}) => {
       return;
     }
     actions.set(portfolio)
-  }, [portfolio])
+  }, [portfolio, actions])
   if(!portfolio) {
     return <>Portfolio not found</>
   }

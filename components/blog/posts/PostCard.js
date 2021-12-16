@@ -28,7 +28,7 @@ const PostCard = ({ post }) => {
             {categories.length > 0 ? categories.map(cat => cat) : null }
           </Box>
         </Box>
-        <Link href={`/posts/${slug}`}>
+        <Link href={`/posts/${slug}`} passHref>
           <Box
             mt="1"
             fontWeight="semibold"

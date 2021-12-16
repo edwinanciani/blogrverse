@@ -1,7 +1,7 @@
 import { Box, Divider, Heading, HStack } from "@chakra-ui/layout"
 import Categories from "../../components/blogrverse/Categories"
 import Feed from "../../components/blogrverse/Feed"
-import {firestore, fromMillis, postToJSON, toJSON} from '../../lib/firebase'
+import {firestore, postToJSON, toJSON} from '../../lib/firebase'
 const LIMIT = 10
 const FeedUniverse = ({posts, categories}) => {
   return (<>
