@@ -11,6 +11,7 @@ import { auth } from '../lib/firebase'
 import { PortfolioContext } from '../lib/context'
 import { AiFillHeart } from 'react-icons/ai'
 import { BiDollar  } from 'react-icons/bi'
+import { useRouter } from 'next/router'
 
 const LinkItem = ({href, path, children}) => {
   const active = path === href
@@ -32,6 +33,7 @@ const Navbar = props => {
   const {path} = props
   const {user, username} = useContext(UserContext)
   const {portfolio} = useContext(PortfolioContext)
+  const route = useRouter()
   return (
     <Box
       position='fixed'
@@ -66,9 +68,9 @@ const Navbar = props => {
             mt={{base:4, nmd: 0}}>
               {
                 portfolio && <>
-                  <LinkItem href='/about' path={path}>
+                 {portfolio.about && <LinkItem href='/about' path={path}>
                   About
-                </LinkItem>
+                </LinkItem>}
                 <LinkItem href='/posts' path={path}>
                   Posts
                 </LinkItem>
@@ -79,9 +81,10 @@ const Navbar = props => {
                 <LinkItem href='/universe' path={path}>
                   Explore
                 </LinkItem>
-                <LinkItem href='/universe' path={path}>
-                  <Button color={'primary'} onClick={() => auth.signOut()}>Log Out</Button>
-                </LinkItem>
+                  <Button color={'primary'} onClick={() => {
+                    route.push('/universe')
+                    auth.signOut()
+                   }}>Log Out</Button>
                 </>
                  }
               </>
@@ -106,7 +109,7 @@ const Navbar = props => {
                 <LinkItem href={`/admin/portfolio/${username}`} path={path}>
                   Portfolio
                 </LinkItem>
-                <Button color={'primary'} onClick={() => auth.signOut()}>Log Out</Button>
+                <Button color={'primary'} onClick={() => auth.signOut().then(route)}>Log Out</Button>
               </>
             ) }
 
