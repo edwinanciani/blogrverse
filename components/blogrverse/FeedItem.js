@@ -38,7 +38,7 @@ const FeedItem = ({portfolio, post}) => {
         </HStack>
         </VStack>
         <Box minW="20%" maxW="20%" maxH="150px" overflow="hidden" justifyContent="center" borderRadius="lg">
-          <Image src={post.banner.urls.regular} alt={post.banner.alt_description}  h="100%"  />
+          <Image src={portfolio?.avatar} alt={portfolio?.username}  h="100%"  />
         </Box>
       </HStack>
     </VStack>
