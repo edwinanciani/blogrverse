@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Edwin's Website",
   "scripts": {
-    "dev": "next dev -H 0.0.0.0",
+    "dev": "NODE_OPTIONS=\"--max_old_space_size=4096\" next dev -H 0.0.0.0",
     "build": "next build",
     "start": "next start",
     "prettier": "prettier -write .",
