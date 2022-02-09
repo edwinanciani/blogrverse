@@ -1,27 +1,32 @@
 import { Button, useColorModeValue } from "@chakra-ui/react"
 import { BsHeart, BsHeartFill } from "react-icons/bs"
-import { auth, firestore } from "../lib/firebase"
+import { auth, firestore, increment } from "../lib/firebase"
 import { useDocument } from 'react-firebase-hooks/firestore';
-import { increment } from "firebase/firestore"
 const StarComponent = ({postData}) => {
   const bg = useColorModeValue("primary.100", "primary.300")
   const color = useColorModeValue("white", "white")
-  const uid = auth.currentUser.uid;
-  const postRef = firestore.collection('posts').doc(postData.slug)
-  const likeRef = postRef.collection('likes').doc(uid)
+  const likeRef = postData.collection('likes').doc(auth.currentUser?.uid)
   const [likeDoc] = useDocument(likeRef)
 
   const addLike = async () => {
+    if(!auth.currentUser?.uid) {
+      console.log('Login PopUP');
+      return;
+    }
     const batch = firestore.batch()
-    batch.update(postRef, {likeCount: increment(1)})
-    batch.set(likeRef, {uid})
+    batch.update(postData, {LikeCount: increment(1)})
+    batch.set(likeRef, {uid:auth.currentUser.uid})
     await batch.commit()
   }
 
   const removeLike = async () => {
+    if(!auth.currentUser?.uid) {
+      console.log('Login PopUP');
+      return;
+    }
     const batch = firestore.batch()
 
-    batch.update(postRef, {LikeCount: increment(-1)})
+    batch.update(postData, {LikeCount: increment(-1)})
     batch.delete(likeRef)
 
     await batch.commit()
@@ -30,7 +35,7 @@ const StarComponent = ({postData}) => {
  return(
    <>
     {
-     likeDoc ?
+     likeDoc?.exists() ?
       <Button bg={bg} _hover={{background: 'primary.300'}} onClick={removeLike} color={color} leftIcon={<BsHeartFill />} _focus={{background: 'primary.300', boxShadow: "0 0 1px 2px #C3376a, 0 1px 1px #C3376a"}}>
         Liked!
       </Button> :

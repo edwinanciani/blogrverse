@@ -6,7 +6,8 @@ import ActionButtons from '../../../components/blog/posts/ActionButtons'
 import Breadcrumbs from '../../../components/Breadcrumb'
 import { firestore,  postToJSON } from '../../../lib/firebase'
 
-const UniversePost = ({ post}) => {
+const UniversePost = ({ post, path}) => {
+  const postRef = firestore.doc(path);
   return (
     <>
       <Breadcrumbs paths={{current: {name: post?.title}, past: {name: 'Universe', path: '/universe'}}} />
@@ -19,7 +20,7 @@ const UniversePost = ({ post}) => {
           <Stack direction={['column']} p={5} spacing={10}>
             {/* <OnThisPost highlights={post?.data.highlights}/> */}
             {/* <RelatedPosts related={post?.data.categories}/> */}
-            <ActionButtons content={post}/>
+            <ActionButtons content={postRef}/>
           </Stack>
         </Box>
       </Stack>
