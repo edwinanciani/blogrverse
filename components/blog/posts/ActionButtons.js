@@ -3,7 +3,7 @@ import { BiShare } from 'react-icons/bi'
 import StarComponent from '../../StarComponent'
 import Coffee from '../../Coffee'
 
-const ActionButtons = ({content}) => {
+const ActionButtons = ({content, link}) => {
   const bg = useColorModeValue("primary.100", "primary.300")
   const color = useColorModeValue("white", "white")
   if(!content) {
@@ -16,7 +16,7 @@ const ActionButtons = ({content}) => {
       <Button bg={bg} _hover={{background: 'primary.300'}} color={color} leftIcon={<BiShare />} _focus={{background: 'primary.300', boxShadow: "0 0 1px 2px #C3376a, 0 1px 1px #C3376a"}}>
         Share
       </Button>
-      <Coffee bg={bg} color={color} />
+      { link ? <Coffee bg={bg} link={link} color={color} /> : null}
 
     </Stack>
   )

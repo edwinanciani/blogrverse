@@ -4,10 +4,11 @@ import Bio from '../components/profile/bio'
 import JobLinks from '../components/profile/joblinks'
 import Socials from '../components/profile/socials'
 import Badges from '../components/profile/badges'
-import { firestore, postToJSON } from '../lib/firebase'
+import { getPortfolio } from '../lib/formio'
 import { getUsername } from '../lib/config'
 import { useContext, useEffect } from 'react'
 import { PortfolioContext } from '../lib/context'
+import Head from 'next/head'
 
 const About = ({portfolio}) => {
   const {actions} = useContext(PortfolioContext)
@@ -20,19 +21,22 @@ const About = ({portfolio}) => {
   if(!portfolio) {
     return <>Portfolio not found</>
   }
-   const {about} = portfolio;
-   const data = about
+   const {data} = portfolio;
+   const {about} = data
   return (
     <Container maxW="container.xl">
+        <Head >
+      <title>{portfolio?.data?.pageTitle}</title>
+    </Head>
         <Stack direction={{base: 'column', sm: 'column', md: 'row'}} spacing="24px" w='100%'>
           <Box p={2} w='100%'>
-            <AvatarProfile profile={data} />
-            <JobLinks links={data.jobLinks}/>
+            <AvatarProfile profile={about} />
+            <JobLinks links={about.jobLinks}/>
           </Box>
           <Box p={2} w='100%'>
             <Box w='100%'>
-              <Bio bio={data.bio} />
-              <Socials info={data} />
+              <Bio bio={about.bio} />
+              <Socials info={about} />
             </Box>
             <Box p={2} w='100%'>
               <Badges />
@@ -44,8 +48,8 @@ const About = ({portfolio}) => {
 }
 export async function getServerSideProps({req}) {
   const username = getUsername(req)
-  const ref = firestore.collection('portfolios').doc(username)
-  const portfolio = postToJSON(await ref.get())
+  const request = await getPortfolio(username)
+  const portfolio = request[0]
   return {
     props: { portfolio }
   };

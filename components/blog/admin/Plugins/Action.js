@@ -1,29 +1,29 @@
 import { Heading, Stack, FormControl, FormLabel, Switch, Box, Button } from '@chakra-ui/react'
 import { IoPushOutline } from 'react-icons/io5'
 import AsyncCreatableSelect from 'react-select/async-creatable'
-import React, {useState, useContext} from 'react'
-import { getCategories } from '../../../../lib/formio'
+import React, {useContext, useState} from 'react'
+import { deliveryGuy, getCategories, postCategories, sendPost } from '../../../../lib/formio'
 import { toast, Toaster } from 'react-hot-toast'
-import { UserContext } from '../../../../lib/context'
-import { auth, firestore, serverTimestamp } from '../../../../lib/firebase'
+import { useAuth } from '../../../../lib/context'
 import kebabCase from 'lodash.kebabcase';
+import { useRouter } from 'next/router'
 
-export const Action = ({data}) => {
+export const Action = ({data, portfolio}) => {
   const [submission, setSubmission] = useState(data)
   const [categories, setCategories] = useState([])
-  const {username } = useContext(UserContext)
+  const {username } = useAuth()
+  const router = useRouter()
 
   const savePost = async () => {
     console.log(submission);
     const slug = encodeURI(kebabCase(submission.data.title))
-    const uid = auth.currentUser.uid
-    const postRef = firestore.collection('posts').doc(slug)
     // create categories
     await createCategories(categories, {username,slug,title: submission.data.title}).then(async (cats) => {
       submission.data.categories = cats;
-      const data = {...submission.data, slug, created: serverTimestamp(), modified: serverTimestamp(), tips: 0, author: username, uid}
-      await postRef.set(data)
+      const data = {data: {...submission.data, slug, tips: 0, username, authorMeta: {avatar: portfolio?.data.about.avatar}}}
+      await sendPost(data)
       toast.success(`${slug} created!`)
+      router.push('/admin')
     })
   }
   
@@ -42,7 +42,7 @@ export const Action = ({data}) => {
   const getAllCategories = async () => {
     const categories = await getCategories({})
     return categories.length > 0 ? 
-    categories.map(category => ({label: category.data.label, value: category.data.value})):
+    categories.map(({data}) => ({label: data.data.label, value: data.data.value})):
     []
   }
   
@@ -93,19 +93,17 @@ export const Action = ({data}) => {
     </>
   )
 }
-const createCategories = (categories, post) => {
+const createCategories = (categories) => {
   return new Promise ((resolve) => {
   if(categories.length === 0) {
     return;
   }
   let count = 0;
   let saveCategories = [];
-  const catRef = firestore.collection('categories')
   let sendCategory =  async () => {
     if(categories[count]) {
       if(categories[count].__isNew__) {
-        const cat = await catRef.doc(categories[count].value)
-        cat.set({name: categories[count].value, value: categories[count].value, post })
+        postCategories({data:{label: categories[count].label, value: categories[count].value}})
         saveCategories.push(categories[count].value)
         count++
         sendCategory()

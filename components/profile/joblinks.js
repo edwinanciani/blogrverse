@@ -9,6 +9,7 @@ const JobLinks = () => {
     animate={{opacity: 1, y: 0}}
     transition={{ ease: "easeIn", duration: 0.6 }}>
     <VStack align="start" pt={5} spacing={4}>
+      {/* TODO: Dynamic Links & Icons */}
       <Link href='https://form.io/' isExternal>
         <Button  leftIcon={<FiBriefcase />} color={'primary.200'} variant="link" isExternal>
           Form.io

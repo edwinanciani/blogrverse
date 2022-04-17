@@ -7,15 +7,23 @@ import {Box, useColorModeValue} from '@chakra-ui/react'
 import Plugin from './Plugins/PluginImage'
 
 const Editor = ({content, setContent, edit}) => {
-  const [editorState, setEditorState] = useState(editorStateFromRaw(setContent))
-  
+  console.log(setContent);
+  const parsed = typeof(setContent) === 'object' ? setContent :  setContent ? JSON.parse(setContent) : null
+  const [editorState, setEditorState] = useState(editorStateFromRaw(parsed || null))
+  const updateContent = (event) => {
+    if(!edit) {
+      setEditorState(event)
+    }
+  }
+  if(content) {
+    content(editorStateToJSON(editorState));
+  }
+
   return (
     <Box px={2} className={useColorModeValue('editorText', 'editorText_dark')}>
         <MegadraftEditor
         editorState={editorState}
-        onChange={(event) => {
-          content(editorStateToJSON(event)) 
-          setEditorState(event)}}
+        onChange={updateContent}
           plugins={[Plugin]}
           readOnly={edit}
         placeholder='Add some text'/>

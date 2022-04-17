@@ -4,13 +4,12 @@ import Article from '../../../components/blog/posts/Article'
 // import RelatedPosts from '../../components/blog/posts/RelatedPosts'
 import ActionButtons from '../../../components/blog/posts/ActionButtons'
 import Breadcrumbs from '../../../components/Breadcrumb'
-import { firestore,  postToJSON } from '../../../lib/firebase'
+import { config, deliveryGuy, getPostBySlug } from '../../../lib/formio'
 
-const UniversePost = ({ post, path}) => {
-  const postRef = firestore.doc(path);
+const UniversePost = ({ post}) => {
   return (
     <>
-      <Breadcrumbs paths={{current: {name: post?.title}, past: {name: 'Universe', path: '/universe'}}} />
+      <Breadcrumbs paths={{current: {name: post?.data?.title}, past: {name: 'Universe', path: '/universe'}}} />
       <Stack as={`main`} justify={['space-between']} py={5} direction={['column', null, 'row']}  columns={[1, null, 3]} spacing={[10]}>
         <Box p={2} as='section' w={['100%', null, '60%']}>
           <Article post={post} />
@@ -20,7 +19,7 @@ const UniversePost = ({ post, path}) => {
           <Stack direction={['column']} p={5} spacing={10}>
             {/* <OnThisPost highlights={post?.data.highlights}/> */}
             {/* <RelatedPosts related={post?.data.categories}/> */}
-            <ActionButtons content={postRef}/>
+            <ActionButtons content={post}/>
           </Stack>
         </Box>
       </Stack>
@@ -30,25 +29,22 @@ const UniversePost = ({ post, path}) => {
 }
 export async function getStaticProps({params}) {
   const {slug } = params
-  const ref = firestore.collection('posts').doc(slug)
-  const post = postToJSON(await ref.get()) || null
-  const path = ref.path
+  const post = await getPostBySlug(slug)
   if (!post) {
     return {
       notFound: true,
     };
   }
   return {
-    props: { post, path }
+    props: { post }
   }
 }
 export async function getStaticPaths() {
-    const snapshot = await firestore.collectionGroup('posts').get();
-
-    const paths = snapshot.docs.map((doc) => {
-      const { slug, author } = doc.data();
+    const posts = await deliveryGuy('GET', config.posts.resource, null, '?limit=9999', true);
+    const paths = posts.map((post) => {
+      const { slug, username } = post.data
       return {
-        params: { author, slug },
+        params: { author: username, slug },
       };
     })
   return {

@@ -1,45 +1,66 @@
-import { useRouter } from 'next/router'
-import {useContext, useState, useEffect} from 'react'
-import { UserContext } from '../../../lib/context'
+import { useState, useEffect} from 'react'
 import dynamic from 'next/dynamic'
-import { config } from '../../../lib/formio'
-import { firestore, postToJSON } from '../../../lib/firebase'
+import { config, getPortfolio, savePortfolio } from '../../../lib/formio'
 import { Container, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
 import toast, { Toaster } from 'react-hot-toast'
 import AvatarEdit from '../../../components/blog/admin/AvatarEdit'
+import { useAuth } from '../../../lib/context'
+import { useRouter } from 'next/router'
 
 const FormComponent = dynamic(() => import('../../../components/Form'), {ssr: false})
 const Portfolio = () => {
-  const route = useRouter()
-  const {user, username} = useContext(UserContext)
+  // TODO: Avatar Images feature.
+  const route = useRouter();
+  const {username } = useAuth();
   const [portfolio, setPortfolio] = useState(null)
   useEffect(() => {
-    if(!user && !username){
-      return console.log('Not User') 
-    }
     console.log(portfolio);
-    const getPortfolio = async () => {
-      if (!username || portfolio) {return;}
-      const ref = firestore.collection('portfolios').doc(username)
-      const portfolioData = (await ref.get()).data(postToJSON)
-      setPortfolio(portfolioData)
+    const fetchPortfolio = async () => {
+      if(!route.isReady) return;
+      if (!username) {
+        console.log(route);
+      }
+      console.log(username);
+      const portfolioData = await getPortfolio(username)
+      console.log(portfolioData);
+      if(portfolioData.length > 0) {
+        if(!portfolioData[0].data.about) {
+          portfolioData[0].data.about = {username}
+        }
+        portfolio = portfolioData[0]
+        setPortfolio(portfolioData[0])
+      } else {
+        setPortfolio({data:{username, about:{data:username}}})
+      }
       return portfolio
     }
-    getPortfolio()
+    fetchPortfolio()
     return portfolio
-  }, [user, username, portfolio])
+  }, [route.isReady])
   const onSubmit = async (submission) => {
-    const ref = firestore.collection('portfolios').doc(route.query.username)
-    await ref.update(submission.data)
+    submission.data.username = username
+    console.log(submission);
+    await savePortfolio(submission)
     toast.success('Portfolio Updated!')
   }
   const onSubmitProfile = async (profile) => {
-    console.log(profile);
+    console.log(profile)
+    if(portfolio?.data) {
+      portfolio.data.about = profile.data
+      setPortfolio(portfolio)
+      await savePortfolio(portfolio)
+      toast.success('About updated')
+    }
+  }
+  const onProfilechange = (profile) => {
+    if(portfolio?.data) {
     console.log(portfolio);
-   const ref = firestore.collection('portfolios').doc(route.query.username)
-   portfolio.about = profile.data
-   await ref.update(portfolio)
-   toast.success('About updated')
+      portfolio.data.about = profile.data;
+      if(!profile?.data?.username) {
+        portfolio.data.about.username = username;
+      }
+      setPortfolio(portfolio)
+    }
   }
   return (
     <Container py={4}>
@@ -54,7 +75,7 @@ const Portfolio = () => {
             { typeof window !== "undefined"  ? <FormComponent data={portfolio} form={`${config.portfolio.form}`} onSubmit={onSubmit} /> : null}
           </TabPanel>
           <TabPanel>
-            { typeof window !== "undefined"  ? <FormComponent data={portfolio?.about} form={`${config.profile.form}`} onSubmit={onSubmitProfile} /> : null}
+            { typeof window !== "undefined"  ? <FormComponent data={{data:portfolio?.data?.about}} onChange={onProfilechange} form={`${config.profile.form}`} onSubmit={onSubmitProfile} /> : null}
           </TabPanel>
           <TabPanel>
             <AvatarEdit data={portfolio} />

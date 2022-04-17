@@ -4,10 +4,10 @@ import Image from 'next/image'
 const ArticleHeader = ({content}) => {
   return (
     <>
-      <Heading as={'h1'} size={'2xl'} py={3}>{content.title}</Heading>
-      <Text fontSize="md" py={5} color={'gray.500'}>{content.description}</Text>
+      <Heading as={'h1'} size={'2xl'} py={3}>{content.data.title}</Heading>
+      <Text fontSize="md" py={5} color={'gray.500'}>{content.data.description}</Text>
       <Box borderRadius={'lg'} overflow="hidden" w={'100%'} >
-        <Image src={content.banner.urls.regular} height={50} width={'100%'} alt={content.banner.alt_description} layout={'responsive'}/>
+        <Image src={content.data.banner?.urls.regular} height={50} width={'100%'} alt={content.data?.banner?.alt_description} layout={'responsive'}/>
       </Box></>
   )
 }

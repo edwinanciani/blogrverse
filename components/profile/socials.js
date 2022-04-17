@@ -22,6 +22,7 @@ const Socials = ({info}) => {
         </Button>
       </VStack>
       <VStack w='100%' spacing='20px' p={2} align='start'>
+        {/* TODO: Dynamic Icons + socials */}
         <Link href='https://twitter.com/edwinanciani' isExternal>
           <Button  leftIcon={<FiTwitter />} variant="link">
             edwinanciani

@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 
 const Badges = () => {
   return (
+    // TODO: Dynamic Badges
     <Box mt="5">
     <motion.div
     initial={{opacity: 0, y: 10}}

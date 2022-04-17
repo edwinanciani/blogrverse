@@ -1,14 +1,41 @@
 import { Box, Grid, Text } from '@chakra-ui/react'
 import Breadcrumbs from '../../../components/Breadcrumb'
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Title } from '../../../components/blog/admin/Plugins/Title'
 import { Banner } from '../../../components/blog/admin/Plugins/Banner'
 import { Action } from '../../../components/blog/admin/Plugins/Action'
 import Editor from '../../../components/blog/admin/Editor'
 import { Description } from '../../../components/blog/admin/Plugins/Description'
+import { useAuth } from '../../../lib/context'
+import { useRouter } from 'next/router'
+import { getPortfolio } from '../../../lib/formio'
 
 const AdminPostDetails = () => {
+  const route = useRouter();
+  const [portfolio, setPortfolio] = useState(null)
+  const {username } = useAuth();
   const [submission, setSubmission] = useState({data: {}})
+  useEffect(() => {
+    console.log(portfolio);
+    const fetchPortfolio = async () => {
+      if(!route.isReady) return;
+      console.log(username);
+      const portfolioData = await getPortfolio(username)
+      console.log(portfolioData);
+      if(portfolioData.length > 0) {
+        if(!portfolioData[0].data.about) {
+          portfolioData[0].data.about = {username}
+        }
+        portfolio = portfolioData[0]
+        setPortfolio(portfolioData[0])
+      } else {
+        setPortfolio({data:{username, about:{data:username}}})
+      }
+      return portfolio
+    }
+    fetchPortfolio()
+    return portfolio
+  }, [route.isReady])
   const getTitle = (event) => {
     submission.data.title = event
     setSubmission(submission)
@@ -45,7 +72,7 @@ const AdminPostDetails = () => {
           {/*Published*/}
           {/*Edit*/}
           <Box>
-            <Action data={submission} />
+            <Action data={submission} portfolio={portfolio} />
           </Box>
         </Box>
       </Grid>

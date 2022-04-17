@@ -1,29 +1,31 @@
-import { Heading, Center, Container, Spacer, VStack, Text, HStack } from '@chakra-ui/react'
+import { Heading, Center, Container, Spacer, VStack, Text, HStack, Stack } from '@chakra-ui/react'
 import Banner from '../components/banner'
 import {motion} from 'framer-motion'
-import { firestore, postToJSON } from '../lib/firebase'
 import { getUsername } from '../lib/config'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useContext, useEffect} from 'react'
 import { PortfolioContext } from '../lib/context'
-const Page = ({ portfolio }) => {
+import { config, deliveryGuy, getPortfolio } from '../lib/formio'
+import LatestActivity from '../components/portfolio/LatestActivity'
+const Page = ({ portfolio, posts}) => {
   const router = useRouter()
   const {actions} = useContext(PortfolioContext)
   useEffect(() => {
     if (!portfolio) {
       router.push('/universe')
     }
+    console.log(portfolio);
     actions.set(portfolio)
   }, [portfolio, actions])
   if(!portfolio) {
     return <>Traveling to the blogrverse</>
   }
-  const data = portfolio
+  const {data} = portfolio
   return (
     <Container maxW='container.xl'>
-    <Head>
-      <title>{data.pageTitle}</title>
+    <Head >
+      <title>{data?.pageTitle}</title>
     </Head>
       <motion.div
         initial={{opacity: 0, y: 10}}
@@ -40,27 +42,28 @@ const Page = ({ portfolio }) => {
           <Center p={5} align='start'>
             <VStack align="start">
               <Heading variant="page-title">
-                <Text>{data.bannerText1}</Text>
-               <HStack> <Text>{data.bannerText2}</Text> <Text  color='primary.100'>{data.bannerText3}</Text></HStack>
+                <Text>{data?.bannerText1}</Text>
+               <HStack> <Text>{data?.bannerText2}</Text> <Text  color='primary.100'>{data?.bannerText3}</Text></HStack>
               </Heading>
-              <Text>{data.shortDescription}</Text>
+              <Text>{data?.shortDescription}</Text>
             </VStack>
           </Center>
           <Spacer />
+          {/* TODO: IMAGE BANNER */}
           <Banner />
           <Spacer />
           <Center p={5} align='start'>
             <VStack align="start">
-              { data.interestPoints.map((bullet) =>
+              { data?.interestPoints.map((bullet, i) =>
               {
                 if (bullet.colorSelect === 'secondText') {
-                  return (<Heading as="h2" display={'flex'}>
+                  return (<Heading key={i} as="h2" display={'flex'}>
                     <HStack>
                      <span> {bullet.firstText}</span> <Text color={'primary.100'}>{bullet.secondText}</Text>
                     </HStack>
                   </Heading>)
                 } else {
-                  return (<Heading as="h2">
+                  return (<Heading key={i} as="h2">
                     <HStack>
                       <Text color={'primary.100'}>{bullet.firstText} </Text> <span>{bullet.secondText}</span>
                     </HStack>
@@ -72,9 +75,9 @@ const Page = ({ portfolio }) => {
           </Center>
 
           <Spacer />
-          <Center p={5} align='start'>
-              Latest Posts or works
-          </Center>
+          <Stack p={5} align='start'>
+              <LatestActivity posts={posts} />
+          </Stack>
         </Container>
       </motion.div>
     </Container>
@@ -93,13 +96,15 @@ export async function getServerSideProps({req}) {
    }
   }
   try {
-    const ref = firestore.collection('portfolios').doc(username) 
-    const portfolio = postToJSON(await ref.get())
+    const posts = await deliveryGuy('GET', config.posts.resource, null, `?limit=3&data.username=${username}`, true)
+    const data = await getPortfolio(username);
+    const portfolio = data[0]
     return {
-      props: { portfolio, redirect }
+      props: { portfolio, posts, redirect }
     };
   }
   catch (err){
+    console.log(err);
     return {
       notFound: true,
       props: {username}

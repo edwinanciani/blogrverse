@@ -7,6 +7,7 @@ import { getUsername } from '../../lib/config'
 import { useContext } from 'react'
 import { PortfolioContext } from '../../lib/context'
 import { useEffect } from 'react'
+import { config, deliveryGuy, getPortfolio } from '../../lib/formio'
 
 
 const Posts = ({portfolio, posts}) => {
@@ -23,7 +24,7 @@ const Posts = ({portfolio, posts}) => {
   return (
     <>
      <Head>
-       <title>My Posts</title>
+       <title>{portfolio?.data.pageTitle + "'s" || 'My'} Posts</title>
      </Head>
       <Heading mt={15} as={'h2'}>Posts</Heading>
       <motion.div
@@ -37,15 +38,10 @@ const Posts = ({portfolio, posts}) => {
 }
 export async function getServerSideProps({req}) {
   const username = getUsername(req)
-  const postsQuery = firestore.collection('posts')
-  .where('author', '==', username)
-  .where('public', '==', true)
-  .orderBy('created', 'desc')
-  .limit(10)
-  const posts = (await postsQuery.get()).docs.map(postToJSON)
+  const posts = await deliveryGuy('GET', config.posts.resource, null, `?limit=${10}&data.username=${username}`, true)
+  const data = await getPortfolio(username);
+  const portfolio = data[0]
   try {
-    const ref = firestore.collection('portfolios').doc(username) 
-    const portfolio = postToJSON(await ref.get())
     return {
       props: { portfolio, posts }
     };

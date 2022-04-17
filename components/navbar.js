@@ -6,7 +6,7 @@ import {
 import { HamburgerIcon } from '@chakra-ui/icons'
 import ThemeToggleButton from './theme-toggle-button'
 import { useContext } from 'react'
-import { UserContext } from '../lib/context'
+import { useAuth} from '../lib/context'
 import { auth } from '../lib/firebase'
 import { PortfolioContext } from '../lib/context'
 import { AiFillHeart } from 'react-icons/ai'
@@ -31,9 +31,14 @@ const LinkItem = ({href, path, children}) => {
 
 const Navbar = props => {
   const {path} = props
-  const {user, username} = useContext(UserContext)
+  const {user, username, onLogout} = useAuth();
   const {portfolio} = useContext(PortfolioContext)
   const route = useRouter()
+  
+  const handleLogout = () => {
+    onLogout();
+    route.push('/auth')
+  }
   return (
     <Box
       position='fixed'
@@ -53,7 +58,7 @@ const Navbar = props => {
         justify='space-between'>
           <Flex align="center" mr={5}>
             <Heading as='h1' size='lg' letterSpacing={'tighter'}>
-              <Logo username={portfolio ? portfolio.username : null} logo={portfolio ? portfolio.logo : null} />
+              <Logo username={portfolio ? portfolio.data.username : null} logo={portfolio ? portfolio.data.logo : null} />
             </Heading>
           </Flex>
           <Box flex={1} display={'flex'} justifyContent={'center'} alignItems={'center'}  align='start'>
@@ -68,12 +73,13 @@ const Navbar = props => {
             mt={{base:4, nmd: 0}}>
               {
                 portfolio && <>
-                 {portfolio.about && <LinkItem href='/about' path={path}>
+                 {portfolio.data.about && <LinkItem href='/about' path={path}>
                   About
                 </LinkItem>}
                 <LinkItem href='/posts' path={path}>
                   Posts
                 </LinkItem>
+                {/* TODO: Like Profile & Donation */}
                 <IconButton icon={<AiFillHeart />} />
                 <IconButton icon={<BiDollar />} />
                 {user &&
@@ -100,6 +106,7 @@ const Navbar = props => {
               </>}
             { user && (
               <>
+              <h3>{user.data.email}</h3>
               <LinkItem href='/universe' path={path}>
                 Explore
               </LinkItem>
@@ -109,7 +116,7 @@ const Navbar = props => {
                 <LinkItem href={`/admin/portfolio/${username}`} path={path}>
                   Portfolio
                 </LinkItem>
-                <Button color={'primary'} onClick={() => auth.signOut().then(route)}>Log Out</Button>
+                <Button color={'primary'} onClick={() => handleLogout()}>Log Out</Button>
               </>
             ) }
 

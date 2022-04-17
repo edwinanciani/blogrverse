@@ -8,6 +8,7 @@ import { firestore, postToJSON } from '../../lib/firebase'
 import { getUsername } from '../../lib/config'
 import { useContext, useEffect } from 'react'
 import { PortfolioContext } from '../../lib/context'
+import { getPortfolio, getPostBySlug } from '../../lib/formio'
 
 const PostDetails = ({ post, portfolio}) => {
  const {actions} = useContext(PortfolioContext)
@@ -30,9 +31,9 @@ const PostDetails = ({ post, portfolio}) => {
         <Divider orientation={'vertical'} display={{base:'none', sm: 'none', md: 'none', lg: 'block'}}/>
         <Box p={2} display={`flex`} as={`aside`} flexDirection={['column']} w={['100%',  null, '20%']} alignItems={['start', null, 'start']}>
           <Stack direction={['column']} p={5} spacing={10}>
-            {/* <OnThisPost highlights={post?.data.highlights}/> */}
-            {/* <RelatedPosts related={post?.data.categories}/> */}
-            <ActionButtons content={post}/>
+            {/* TODO: <OnThisPost highlights={post?.data.highlights}/> */}
+            {/* TODO: <RelatedPosts related={post?.data.categories}/> */}
+            <ActionButtons content={post} link={portfolio?.data?.about?.buyMeACoffee}/>
           </Stack>
         </Box>
       </Stack>
@@ -43,19 +44,17 @@ const PostDetails = ({ post, portfolio}) => {
 export async function getServerSideProps({req, params}) {
   const username = getUsername(req)
   const {slug } = params
-  const ref = firestore.collection('posts').doc(slug)
-  const post = postToJSON(await ref.get()) || null
-  const path = ref.path
+  const post = await getPostBySlug(slug)
+  const data = await getPortfolio(username);
+  const portfolio = data[0]
   if (!post) {
     return {
       notFound: true,
     };
   }
   try {
-    const ref = firestore.collection('portfolios').doc(username) 
-    const portfolio = postToJSON(await ref.get())
     return {
-      props: { portfolio, post, path }
+      props: { portfolio, post }
     };
   }  catch (err){
       return {

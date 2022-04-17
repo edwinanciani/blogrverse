@@ -1,7 +1,7 @@
 import { Box, Divider, Heading, HStack } from "@chakra-ui/layout"
 import Categories from "../../components/blogrverse/Categories"
 import Feed from "../../components/blogrverse/Feed"
-import {firestore, postToJSON, toJSON} from '../../lib/firebase'
+import { config, deliveryGuy, getCategories } from "../../lib/formio"
 const LIMIT = 10
 const FeedUniverse = ({posts, categories}) => {
   return (<>
@@ -21,13 +21,8 @@ const FeedUniverse = ({posts, categories}) => {
 }
 
 export async function getServerSideProps() {
-  const postsQuery = firestore.collection('posts')
-  .where('public', '==', true)
-  .orderBy('created', 'desc')
-  .limit(LIMIT)
-  const catQuery = firestore.collection('categories')
-  const categories = (await catQuery.get()).docs.map(toJSON)
-  const posts = (await postsQuery.get()).docs.map(postToJSON)
+  const posts = await deliveryGuy('GET', config.posts.resource, null, `?limit=${LIMIT}`, true)
+  const categories = await getCategories({})
   return {
     props: { posts, categories}
   }

@@ -9,7 +9,7 @@ const Article = ({post}) => {
   return (
     <Box as={`article`} >
       <ArticleHeader content={post} />
-      <Editor setContent={post.content} edit={true}  />
+      <Editor setContent={post.data.content} edit={true}  />
       {/* Some integrations like donations */}
       {/* <ArticleFooter/> */}
     </Box>
