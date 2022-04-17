@@ -1,7 +1,6 @@
 import { Button, useColorModeValue } from "@chakra-ui/react"
 import { BsHeart, BsHeartFill } from "react-icons/bs"
 import { auth, firestore, increment } from "../lib/firebase"
-import { useDocument } from 'react-firebase-hooks/firestore';
 const StarComponent = ({postData}) => {
   const bg = useColorModeValue("primary.100", "primary.300")
   // TODO: Likes Features

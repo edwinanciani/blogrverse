@@ -1,8 +1,7 @@
 import React from 'react'
 import Feed from '../../../components/blogrverse/Feed';
-import { firestore, postToJSON } from '../../../lib/firebase';
 import { Container, Heading } from '@chakra-ui/layout';
-const LIMIT = 10
+import { config, deliveryGuy, getCategories } from '../../../lib/formio';
 
 
 const Category = ({posts, category}) => {
@@ -17,23 +16,18 @@ const Category = ({posts, category}) => {
 
 export async function getStaticProps({params}) {
   const {category} = params
-  const ref = firestore.collection('posts')
-  .where('categories', 'array-contains', category)
-  .where('public', '==', true)
-  .orderBy('created', 'desc')
-  .limit(LIMIT)
-  const posts = (await ref.get()).docs.map(postToJSON)
+  const posts = await deliveryGuy('GET', config.posts.resource, null, `?data.categories__in=${category}`, true) 
   return {
     revalidate: 5000,
     props: {posts, category}
   }
 }
 export async function getStaticPaths() {
-  const ref = await firestore.collectionGroup('categories').get()
-  const paths = ref.docs.map((doc) => {
-    const {name} = doc.data()
+  const categories = await getCategories({})
+  const paths = categories.map((cat) => {
+    const {value} = cat.data
     return {
-      params: {category: name }
+      params: {category: value }
     }
   })
   return {

@@ -19,17 +19,14 @@ import {
 } from '@chakra-ui/react'
 import { FaLock } from 'react-icons/fa'
 import Head from 'next/head'
-import { useContext } from 'react'
-import { useAuth, UserContext } from '../lib/context'
+import { useAuth } from '../lib/context'
 import { toast, Toaster } from 'react-hot-toast'
 import { useState } from 'react'
-import { useRouter } from 'next/router'
 import { LoginAction } from '../lib/formio'
 
 const AuthPage = () => {
   const auth = useAuth()
   const logoImage = `/images/a${useColorModeValue('dark', '')}.svg`
-  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const emailHandler = ev => {
@@ -38,7 +35,7 @@ const AuthPage = () => {
   const passwordHandler = ev => {
     setPassword(ev.target.value)
   }
-  const SignUp = async (email, password) => {
+  const SignUp = async () => {
     try {
       // const userCreds = await auth.createUserWithEmailAndPassword(email, password)
       // console.log(userCreds);

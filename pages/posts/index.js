@@ -1,7 +1,6 @@
 import {Heading } from '@chakra-ui/react'
 import Head from 'next/head'
 import { motion } from 'framer-motion'
-import { firestore, postToJSON } from '../../lib/firebase'
 import Feed from '../../components/blogrverse/Feed'
 import { getUsername } from '../../lib/config'
 import { useContext } from 'react'

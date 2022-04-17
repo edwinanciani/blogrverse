@@ -1,8 +1,8 @@
 import { Heading, Stack, FormControl, FormLabel, Switch, Box, Button } from '@chakra-ui/react'
 import { IoPushOutline } from 'react-icons/io5'
 import AsyncCreatableSelect from 'react-select/async-creatable'
-import React, {useContext, useState} from 'react'
-import { deliveryGuy, getCategories, postCategories, sendPost } from '../../../../lib/formio'
+import React, { useState} from 'react'
+import { getCategories, postCategories, sendPost } from '../../../../lib/formio'
 import { toast, Toaster } from 'react-hot-toast'
 import { useAuth } from '../../../../lib/context'
 import kebabCase from 'lodash.kebabcase';

@@ -2,6 +2,8 @@ import { Text, Link, useBreakpointValue, useColorModeValue, List, ListItem, Head
 import moment from "moment"
 
 const LatestActivity = ({posts}) => {
+  const bg = useBreakpointValue({ base: 'transparent', sm: 'bg-surface' })
+  const value = useColorModeValue('md', 'md-dark')
   return (
     <>
    <Heading as={'h5'} my={'4'} fontSize={'lg'}  >Latest Activity</Heading>  
@@ -11,8 +13,8 @@ const LatestActivity = ({posts}) => {
           key={post._id} spacing={2} direction={'column'} 
           py={{ base: '0', sm: '3' }}
           px={{ base: '2', sm: '5' }}
-          bg={useBreakpointValue({ base: 'transparent', sm: 'bg-surface' })}
-          boxShadow={{ base: 'none', sm: useColorModeValue('md', 'md-dark') }}
+          bg={bg}
+          boxShadow={{ base: 'none', sm: value }}
           borderRadius={{ base: 'none', sm: 'xl' }}>
             <Link href={`/posts/${post.data.slug}`} textDecoration="none" _hover={{ textDecoration: 'none' }}>
               <Text fontSize={'md'} fontWeight='medium'>

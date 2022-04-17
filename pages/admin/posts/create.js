@@ -1,6 +1,6 @@
 import { Box, Grid, Text } from '@chakra-ui/react'
 import Breadcrumbs from '../../../components/Breadcrumb'
-import { useContext, useEffect, useState } from 'react'
+import {  useEffect, useState } from 'react'
 import { Title } from '../../../components/blog/admin/Plugins/Title'
 import { Banner } from '../../../components/blog/admin/Plugins/Banner'
 import { Action } from '../../../components/blog/admin/Plugins/Action'
